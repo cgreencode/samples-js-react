@@ -9,8 +9,8 @@ addons:
 install:
 - npm install
 
-script:
-- npm test
+script: ./scripts/travis.sh
 
 before_install:
   - "npm install -g npm@5.6.0"
+
