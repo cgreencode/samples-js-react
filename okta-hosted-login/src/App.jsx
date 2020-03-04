@@ -10,9 +10,9 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import React from 'react';
+import React, { Component } from 'react';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
-import { Security, SecureRoute, LoginCallback } from '@okta/okta-react';
+import { Security, SecureRoute, ImplicitCallback } from '@okta/okta-react';
 import { Container } from 'semantic-ui-react';
 import config from './config';
 import Home from './Home';
@@ -20,17 +20,22 @@ import Messages from './Messages';
 import Navbar from './Navbar';
 import Profile from './Profile';
 
-const App = () => (
-  <Router>
-    <Security {...config.oidc}>
-      <Navbar />
-      <Container text style={{ marginTop: '7em' }}>
-        <Route path="/" exact component={Home} />
-        <Route path="/implicit/callback" component={LoginCallback} />
-        <SecureRoute path="/messages" component={Messages} />
-        <SecureRoute path="/profile" component={Profile} />
-      </Container>
-    </Security>
-  </Router>
-);
+class App extends Component {
+  render() {
+    return (
+      <Router>
+        <Security {...config.oidc}>
+          <Navbar />
+          <Container text style={{ marginTop: '7em' }}>
+            <Route path="/" exact component={Home} />
+            <Route path="/implicit/callback" component={ImplicitCallback} />
+            <SecureRoute path="/messages" component={Messages} />
+            <SecureRoute path="/profile" component={Profile} />
+          </Container>
+        </Security>
+      </Router>
+    );
+  }
+}
+
 export default App;

@@ -10,9 +10,9 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import React from 'react';
+import React, { Component } from 'react';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
-import { Security, SecureRoute, LoginCallback } from '@okta/okta-react';
+import { Security, SecureRoute, ImplicitCallback } from '@okta/okta-react';
 import { Container } from 'semantic-ui-react';
 import config from './config';
 import Home from './Home';
@@ -21,29 +21,33 @@ import Messages from './Messages';
 import Navbar from './Navbar';
 import Profile from './Profile';
 
-function customAuthHandler() {
+function customAuthHandler({ history }) {
   // Redirect to the /login page that has a CustomLoginComponent
-  window.location.assign(`${window.location.origin}/login`);
+  history.push('/login');
 }
 
-const App = () => (
-  <div>
-    <Router>
-      <Security
-        {...config.oidc}
-        onAuthRequired={customAuthHandler}
-      >
-        <Navbar />
-        <Container text style={{ marginTop: '7em' }}>
-          <Route path="/" exact component={Home} />
-          <Route path="/implicit/callback" component={LoginCallback} />
-          <Route path="/login" component={CustomLoginComponent} />
-          <SecureRoute path="/messages" component={Messages} />
-          <SecureRoute path="/profile" component={Profile} />
-        </Container>
-      </Security>
-    </Router>
-  </div>
-);
+class App extends Component {
+  render() {
+    return (
+      <div>
+        <Router>
+          <Security
+            {...config.oidc}
+            onAuthRequired={customAuthHandler}
+          >
+            <Navbar />
+            <Container text style={{ marginTop: '7em' }}>
+              <Route path="/" exact component={Home} />
+              <Route path="/implicit/callback" component={ImplicitCallback} />
+              <Route path="/login" component={CustomLoginComponent} />
+              <SecureRoute path="/messages" component={Messages} />
+              <SecureRoute path="/profile" component={Profile} />
+            </Container>
+          </Security>
+        </Router>
+      </div>
+    );
+  }
+}
 
 export default App;
